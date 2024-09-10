@@ -4,24 +4,32 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotfoundPage from "./pages/NotfoundPage";
 import ForgetPasswordPage from "./pages/ForgetPasswordPage";
+import DashboardLayout from "./pages/DashboardLayout";
 export const Router = createBrowserRouter([
-    {path:'/',
-        element:<HomePage/>
-    },
-    {path:'/home',
-        element:<HomePage/>
-    },
-    {path:'/login',
-        element:<LoginPage/>
-    },
-    {path:'/register',
-        element:<RegisterPage/>
-    },
-    {path:'*',
-        element:<NotfoundPage/>
-    },
-    {
-        path:"/forgetpassword",
-    element:<ForgetPasswordPage/>
-    }
-])
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />, // Use DashboardLayout as a parent
+    children: [
+      {
+        path: "home", // Relative path to match /dashboard/home
+        element: <HomePage />, // This will render inside the DashboardLayout
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/forgetpassword",
+    element: <ForgetPasswordPage />,
+  },
+  {
+    path: "*", // Catch-all for undefined routes
+    element: <NotfoundPage />,
+  },
+]);
