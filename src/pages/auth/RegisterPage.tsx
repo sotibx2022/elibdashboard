@@ -10,15 +10,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { validateEmail, validateFirstName, validateLastName, validatePassword } from "@/helper/validation"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { RegisterData } from "@/types/types"
 import { useMutation } from "react-query"
 import { registerUser } from "@/helper/mutation"
 const RegisterPage = () => {
+  const navigate = useNavigate()
   const mutatation = useMutation(
    {mutationFn:registerUser,
     onSuccess:(data)=>{
       alert(data.message);
+      if(data.accessToken){
+        localStorage.setItem('accessToken', data.accessToken);
+      }
+      navigate('/dashboard')
     },
     onError:(error)=>{
      if(error instanceof Error){

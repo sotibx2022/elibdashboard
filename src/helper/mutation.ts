@@ -10,7 +10,6 @@ export interface APIResponse{
 export const registerUser = async (userData:RegisterData):Promise<APIResponse> => {
   try {
     const response = await axios.post(`http://localhost:5232/api/users/register`, userData);
-    console.log(response.data)
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

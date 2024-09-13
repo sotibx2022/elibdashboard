@@ -107,7 +107,7 @@ import { Link } from "react-router-dom"
                     </TableHeader>
                     <TableBody>
                      {books.map((book:BookDisplay)=>{
-                        return  <TableRow>
+                        return  <TableRow key={book._id}>
                         <TableCell className="hidden sm:table-cell">
                           <img
                             alt={book.title}

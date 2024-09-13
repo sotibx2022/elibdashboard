@@ -13,13 +13,16 @@ import { validateEmail, validatePassword } from "@/helper/validation"
 import { LoginData } from "@/types/types"
 import { useForm } from "react-hook-form"
 import { useMutation } from "react-query"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 const LoginPage = () => {
+  const navigate = useNavigate()
   const {register,formState:{errors} , handleSubmit} = useForm<LoginData>();
   const mutation = useMutation({
     mutationFn:loginUser,
     onSuccess:(data)=>{
       alert(data.message);
+      localStorage.setItem('accessToken', data.accessToken);
+      navigate('/dashboard')
     },
     onError:(error)=>{
       if(error instanceof Error){

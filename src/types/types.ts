@@ -6,5 +6,30 @@ export interface RegisterData{
 }
 export interface LoginData{
     email:string,
-    password:string,
+    password:string
+}
+export interface BookCreate{
+    title:string,
+    description:string,
+    author:string,
+    genre:string,
+    coverImage:FileList,
+    file:FileList
+}
+export interface User{
+    name:string,
+    email:string,
+    _id:string,
+}
+export interface BookDisplay{
+    title:string,
+    description:string,
+    author:string,
+    genre:string,
+    coverImage:string,
+    file:string,
+    user:User,
+    createdAt:string,
+    updatedAt:string,
+    _id:string,
 }
