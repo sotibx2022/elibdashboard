@@ -9,15 +9,22 @@ import { validateBookTitle, validateDescription, validateFile, validateFullName 
 import { validateFirstName } from "@/helper/validation"
 import { useMutation } from "react-query"
 import { createBook } from "@/helper/bookMutation"
+import LoadingButton from "@/customUI/LoadingButton"
+import { useNavigate } from "react-router-dom"
 const AddBookPage = () => {
+  const navigate = useNavigate()
     const{register, formState:{errors}, handleSubmit} = useForm<BookCreate>();
     const mutatation = useMutation({
         mutationFn:createBook,
         onSuccess:(data)=>{
             alert(data.message);
+navigate('/dashboard/books');
         },
         onError:(error)=>{
+          if(error instanceof Error){
             alert("There is and error while creating book.")
+          }
+           alert("An Unexpected Error Occuered.") 
         }
     })
     const onSubmit =(data:BookCreate) =>{
@@ -75,7 +82,9 @@ const AddBookPage = () => {
                 {errors.file && <p className="text-red-500 text-sm">{errors.file.message}</p>}
               </div>
               {/* Submit Button */}
-              <Button type="submit">Submit</Button>
+               <Button type="submit" disabled={mutatation.isLoading}>
+{mutatation.isLoading ? <LoadingButton/>:"Submit"}
+</Button>
             </form>
           </CardContent>
         </CardHeader>
