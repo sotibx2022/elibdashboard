@@ -10,9 +10,13 @@ import { useQuery } from "react-query"
 import { getAllBooks } from "@/helper/queryfns"
 import { BookDisplay } from "@/types/types"
 import { formatDate } from "@/helper/formatDate"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
   const BooksPage = () =>{
-    const { data: books = [] } = useQuery({ queryFn: getAllBooks, queryKey: ['books'] })
+    const navigate = useNavigate()
+    const { data: books = [] } = useQuery({ queryFn: getAllBooks, queryKey: ['books'] });
+    const editBook=(bookId:string) =>{
+navigate(`/dashboard/books/${bookId}`)
+    }
     return (
    <section>
      <Breadcrumb>
@@ -146,7 +150,9 @@ import { Link } from "react-router-dom"
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
+                              <DropdownMenuItem>
+                               <span onClick={()=>editBook(book._id)}>Edit</span> 
+                                </DropdownMenuItem>
                               <DropdownMenuItem>Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

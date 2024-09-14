@@ -25,6 +25,10 @@ export const Router = createBrowserRouter([
         path: "books/add", // Relative path to match /dashboard/home
         element: <AddBookPage />, // This will render inside the DashboardLayout
       },
+      {
+        path: "books/:bookId", // Relative path to match /dashboard/home
+        element: <AddBookPage />, // This will render inside the DashboardLayout
+      },
     ],
   },
   {path:"/auth",

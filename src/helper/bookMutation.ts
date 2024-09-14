@@ -5,35 +5,44 @@ export const findAccessToken =() =>{
     const token = localStorage.getItem('accessToken')
     return token
 }
-export const createBook = async (data: BookCreate): Promise<APIResponse> => {
-    try {
-      const token = findAccessToken(); // Get the token
-      console.log(token);
-      const formData = new FormData();
-formData.append('title', data.title);
-formData.append('author', data.author);
-formData.append('genre', data.genre);
-formData.append('description', data.description);
-formData.append('coverImage', data.coverImage[0]); // assuming this is a file object
-formData.append('pdf', data.file[0]); // assuming this is another file object
-      const response = await axios.post(
-        'http://localhost:5232/api/books',
-        formData,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`, // Add token to Authorization header
-            'Content-Type': 'multipart/form-data'
-          },
-        }
-      );
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      // Handle errors properly
-      return {
-        message: "There is something went wrong to create book",
-        success: false,
-        status: 400,
-      };
+// Reusable function for creating or updating a book
+export const createBook = async (data: BookCreate, bookId?: string): Promise<APIResponse> => {
+  try {
+    const token = findAccessToken(); // Get the access token
+    // Create form data with the book information
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('author', data.author);
+    formData.append('genre', data.genre);
+    formData.append('description', data.description);
+    if (data.coverImage && data.coverImage[0]) {
+      formData.append('coverImage', data.coverImage[0]); // assuming this is a file object
     }
-  };
+    if (data.file && data.file[0]) {
+      formData.append('pdf', data.file[0]); // assuming this is a PDF file
+    }
+    // Determine the request method and URL based on whether a bookId is provided
+    const url = bookId ? `http://localhost:5232/api/books/${bookId}` : 'http://localhost:5232/api/books';
+    const method = bookId ? 'put' : 'post'; // Use 'PUT' for updating, 'POST' for creating
+    // Make the request
+    const response = await axios({
+      method: method,
+      url: url,
+      data: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`, // Add token to Authorization header
+        'Content-Type': 'multipart/form-data'
+      },
+    });
+    // Log and return the response data
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    // Handle errors properly
+    return {
+      message: bookId ? "There was an error updating the book" : "There was an error creating the book",
+      success: false,
+      status: 400,
+    };
+  }
+};
