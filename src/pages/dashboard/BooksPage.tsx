@@ -6,16 +6,29 @@ import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } 
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "react-query"
+import { useMutation, useQuery } from "react-query"
 import { getAllBooks } from "@/helper/queryfns"
 import { BookDisplay } from "@/types/types"
 import { formatDate } from "@/helper/formatDate"
 import { Link, useNavigate } from "react-router-dom"
+import { deleteBook } from "@/helper/bookMutation"
   const BooksPage = () =>{
     const navigate = useNavigate()
+    const mutation= useMutation({
+      mutationFn:deleteBook,
+      onSuccess:(data)=>{
+alert(data.message)
+      },
+      onError:(error)=>{
+        alert("Error Occured to delete a book.");
+      }
+    })
     const { data: books = [] } = useQuery({ queryFn: getAllBooks, queryKey: ['books'] });
     const editBook=(bookId:string) =>{
 navigate(`/dashboard/books/${bookId}`)
+    }
+    const deleteHandler =(bookId:string)=>{
+      mutation.mutate(bookId)
     }
     return (
    <section>
@@ -153,7 +166,9 @@ navigate(`/dashboard/books/${bookId}`)
                               <DropdownMenuItem>
                                <span onClick={()=>editBook(book._id)}>Edit</span> 
                                 </DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <span onClick={()=>deleteHandler(book._id)}>Delete</span>
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>

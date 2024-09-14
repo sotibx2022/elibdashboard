@@ -46,3 +46,20 @@ export const createBook = async (data: BookCreate, bookId?: string): Promise<API
     };
   }
 };
+export const deleteBook = async(bookId:string):Promise<APIResponse>=>{
+  try {
+    const token = findAccessToken();
+    const response = await axios.delete(`http://localhost:5232/api/books/${bookId}`,{
+     headers: {
+        'Authorization': `Bearer ${token}`, // Add token to Authorization header
+      },
+    })
+    return response.data
+  } catch (error) {
+    return {
+      message:"There is some Probelm to delete the book",
+      status:400,
+success:true,
+    }
+  }
+}
